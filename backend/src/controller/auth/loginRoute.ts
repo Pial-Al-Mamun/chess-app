@@ -1,8 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
-import { createSelectSchema } from "drizzle-zod";
 import { Hono } from "hono";
-import type { User } from "@/db/schema.js";
-import { z } from "zod";
 import { userSchema } from "@/db/zodSchemas.js";
 
 const loginRoute = new Hono();
