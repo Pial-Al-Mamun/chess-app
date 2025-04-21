@@ -1,6 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { userSchema } from "@/db/zodSchemas.js";
+import { db } from "@/db/index.js";
 
 const loginRoute = new Hono();
 
