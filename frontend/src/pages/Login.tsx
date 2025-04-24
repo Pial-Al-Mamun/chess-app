@@ -19,6 +19,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+import axios from "axios";
+import api from "@/api/api";
+
 const loginFormSchema = z.object({
   email: z.string().min(2, "Email must be at least 2 characters.").max(50),
   password: z
@@ -34,7 +37,11 @@ export default function Login() {
   });
   const [isVisible, setIsVisible] = useState(false);
 
-  function onSubmit(values: z.infer<typeof loginFormSchema>) {}
+  async function onSubmit(values: z.infer<typeof loginFormSchema>) {
+    const res = await api.post("auth/signup", values);
+
+    if (!res.data.ok) return;
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black text-white">

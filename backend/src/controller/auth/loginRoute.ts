@@ -1,7 +1,12 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { userSchema } from "@/db/zodSchemas.js";
-import { db } from "@/db/index.js";
+import db from "@/db/index.js";
+import bcrypt from "bcrypt";
+import { usersTable } from "@/db/schema/userSchema.js";
+import { eq } from "drizzle-orm";
+
+const saltRounds = 10;
 
 const loginRoute = new Hono();
 
@@ -12,8 +17,20 @@ export const loginSchema = userSchema.pick({
 
 loginRoute.post("/login", zValidator("json", loginSchema), async (c) => {
   const { email, password } = c.req.valid("json");
+  const [user] = await db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.email, email));
 
-  return c.json({ ok: true, message: "bomboclat" }, 200);
+  if (!user) return c.json({ ok: false, message: "User not found" }, 404);
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    return c.json({ ok: false, message: "Invalid credentials" }, 401);
+  }
+
+  return c.json({ ok: true, message: "user successfully logged in" }, 200);
 });
 
 export default loginRoute;

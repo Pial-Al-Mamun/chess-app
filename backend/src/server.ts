@@ -1,12 +1,26 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import loginRoute from "./controller/auth/loginRoute.js";
+import signupRoute from "./controller/auth/signupRoute.js";
+import { cors } from "hono/cors";
+import env from "~/env.js";
 
 const app = new Hono();
-app.all("/", (c) => {
-  return c.text("Hello");
+
+// allow only the allowed sites
+app.use("*", async (c, next) => {
+  const corsMiddlewareHandler = cors({
+    origin: env.CORS_ORIGIN,
+  });
+  return corsMiddlewareHandler(c, next);
 });
+
+app.all("/", (c) => {
+  return c.json({ status: "OK", message: "API is live" });
+});
+
 app.route("/auth", loginRoute);
+app.route("/auth", signupRoute);
 
 serve(
   {
@@ -14,6 +28,6 @@ serve(
     port: 3000,
   },
   (info) => {
-    console.log(`Server is running on http://localhost:${info.port}`);
+    console.log(`Server is running on http://0.0.0.0:${info.port}`);
   }
 );
