@@ -1,7 +1,7 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
-import loginRoute from "./controller/auth/loginRoute.js";
-import signupRoute from "./controller/auth/signupRoute.js";
+import loginRoute from "./controller/auth/login";
+import signupRoute from "./controller/auth/signup";
 import { cors } from "hono/cors";
 import env from "~/env.js";
 

@@ -1,6 +1,5 @@
 import { createSelectSchema } from "drizzle-zod";
-import { usersTable } from "./schema/userSchema.js";
-import { z } from "zod";
+import { usersTable } from "./schema/user";
 
 export const userSchema = createSelectSchema(usersTable);
 

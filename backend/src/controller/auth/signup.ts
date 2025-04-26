@@ -1,9 +1,9 @@
-import bcrypt from "bcrypt";
-import db from "@/db/index.js";
+import { hash } from "bcrypt";
+import db from "@/database/index";
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
-import { signupSchema } from "@/db/zodSchemas.js";
-import { usersTable } from "@/db/schema/userSchema.js";
+import { signupSchema } from "@/database/zodSchema";
+import { usersTable } from "@/database/schema/user";
 import { eq } from "drizzle-orm";
 
 const signupRoute = new Hono();
@@ -20,7 +20,7 @@ signupRoute.get("/signup", zValidator("json", signupSchema), async (c) => {
   if (doesUserExist)
     return c.json({ ok: false, message: "Email already registered" }, 409);
 
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const hashedPassword = await hash(password, saltRounds);
   await db
     .insert(usersTable)
     .values({ username, email, password: hashedPassword });
