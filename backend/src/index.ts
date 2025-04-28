@@ -3,17 +3,19 @@ import { Hono } from "hono";
 import loginRoute from "./controller/auth/login";
 import signupRoute from "./controller/auth/signup";
 import { cors } from "hono/cors";
-import env from "~/env.js";
-
+import env from "env";
+import { prettyJSON } from "hono/pretty-json";
 const app = new Hono();
 
 // allow only the allowed sites
 app.use("*", async (c, next) => {
   const corsMiddlewareHandler = cors({
-    origin: env.CORS_ORIGIN,
+    origin: process.env.NODE_ENV === "production" ? env.CORS_ORIGIN : "*",
   });
   return corsMiddlewareHandler(c, next);
 });
+
+app.use(prettyJSON({ space: 4 }));
 
 app.all("/", (c) => {
   return c.json({ status: "OK", message: "API is live" });

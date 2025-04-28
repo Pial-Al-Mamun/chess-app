@@ -1,5 +1,3 @@
-"use client";
-
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import axios from "axios";
 import api from "@/api/api";
 
 const loginFormSchema = z.object({
@@ -35,12 +32,16 @@ export default function Login() {
     resolver: zodResolver(loginFormSchema),
     defaultValues: { email: "", password: "" },
   });
+
   const [isVisible, setIsVisible] = useState(false);
-
+  const [message, setMessage] = useState("");
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    const res = await api.post("auth/signup", values);
+    const res = await api.post("auth/login", values);
 
-    if (!res.data.ok) return;
+    if (res.status != 200) {
+      setMessage(res.data.message);
+      return;
+    }
   }
 
   return (
@@ -103,7 +104,7 @@ export default function Login() {
                   </FormItem>
                 )}
               />
-
+              {message && <p className="text-2xl text-red-400">{message}</p>}
               <Button type="submit">Submit</Button>
             </form>
           </Form>

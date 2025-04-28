@@ -1,9 +1,5 @@
-import { z } from "zod";
+const EnvVariables = {
+  backendURL: import.meta.env.VITE_BACKEND_BASE_URL,
+};
 
-const EnvSchema = z.object({
-  BACKEND_BASE_URL: z.string().nonempty(),
-});
-
-const env = EnvSchema.parse(process.env);
-
-export default env;
+export default EnvVariables;

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "./components/ui/button";
 
-function App() {
+function StartPage() {
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-black via-gray-900 to-black text-white">
       <header className="sticky top-0 z-50 backdrop-blur-lg border-b border-gray-200">
@@ -43,4 +43,4 @@ function App() {
   );
 }
 
-export default App;
+export default StartPage;

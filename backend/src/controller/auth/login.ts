@@ -1,12 +1,10 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import { userSchema } from "@/database/zodSchema";
+import { userSchema } from "@/database/zod-schema";
 import db from "@/database/index";
 import { compare } from "bcrypt";
 import { usersTable } from "@/database/schema/user";
 import { eq } from "drizzle-orm";
-
-const saltRounds = 10;
 
 const loginRoute = new Hono();
 
